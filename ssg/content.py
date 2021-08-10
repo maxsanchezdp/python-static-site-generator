@@ -5,18 +5,18 @@ from collections.abc import Mapping
 
 class Content(Mapping):
 
-    __delimiter = "^(?:-|\+){3}\s*$"
+    __delimiter = r"^(?:-|\+){3}\s*$"
     __regex = re.compile(__delimiter, re.MULTILINE)
 
     @classmethod
     def load(cls, string):
-        _, fm, contents = cls.__regex.split(string, depth=2)
-        load(fm, Loader=FullLoader)
+        _, fm, content = cls.__regex.split(string, 2)
+        metadata = load(fm, Loader=FullLoader)
         return cls(metadata, content)
 
     def __init__(self, metadata, content):
         self.data = metadata
-        self.content = {"content": self.data}
+        self.data["content"] = content
 
     @property
     def body(self):
